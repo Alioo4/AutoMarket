@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Transmission{
+  machine
+  mechanics
+}
+
+model Users {
+  id        String @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  fullname  String  @db.VarChar(255)
+  phone     String  @db.VarChar(255) @unique
+  password  String  @db.VarChar(255)
+  isAdmin   Boolean @default(false)
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([id])
+  @@map("users")
+}
+
+model Category {
+  id        String @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  title     String @db.VarChar(255)
+  photo     String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  cars Cars[]
+
+  @@id([id])
+  @@map("category")
+}
+
+model Cars {
+  id           String @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  name         String @db.VarChar(255)
+  city         String @db.VarChar(255)
+  year         Int 
+  body         String @db.VarChar(255)
+  mileage      String @db.VarChar(255)
+  transmission Transmission
+  color        String @db.VarChar(255)
+  price        String @db.VarChar(255)
+  photo        String @db.VarChar(255)
+  categoryId   String @map("category_id") @db.Uuid
+  description  String @db.Text
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id])
+  @@map("cars")
+}
+
+
+
+
+
