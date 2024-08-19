@@ -6,7 +6,7 @@ const { prisma } = require("../helpers/db");
 
 const register = async (req, res, next) => {
   try {
-    const { fullname, phone, password, isAdmin } = req.body;
+    const { fullname, phone, password } = req.body;
 
     const schema = Joi.object({
         fullname: Joi.string().min(5).required(),
@@ -32,7 +32,6 @@ const register = async (req, res, next) => {
         fullname,
         phone,
         password: hashedPassword,
-        isAdmin
       },
     });
 

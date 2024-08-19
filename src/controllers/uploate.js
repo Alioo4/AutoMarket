@@ -8,7 +8,7 @@ const uploadPhoto = async(req, res, next) => {
         const photoName = `${uuid()}${path.extname(image.name)}`
         image.mv(`${process.cwd()}/uploads/${photoName}`)
         
-        res.status(201).json({status: 201, message: "Success!!!", data: `http://192.168.1.105:8080/${photoName}`})
+        res.status(201).json({status: 201, message: "Success!!!", data: `http://94.198.217.38:8080/${photoName}`})
     } catch (error) {
         next(error)
     }
