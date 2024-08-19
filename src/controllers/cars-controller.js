@@ -85,10 +85,14 @@ const getOne = async(req, res, next) => {
 
         const findId = await prisma.cars.findUnique({where: {id}});
 
+        let cid = findId.categoryId
+
+        const findCateg = await prisma.category.findFirst({where: {id: cid}})
+
         if(!findId)
             return res.status(404).json({status: 404, message: 'This id not found!!!'})
 
-        res.status(200).json({ status: 200, message: "Success", data: findId});
+        res.status(200).json({ status: 200, message: "Success", data: {findId, categoryName: findCateg.title}});
     } catch (error) {
         next(error)
     }
