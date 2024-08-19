@@ -84,15 +84,36 @@ const getOne = async(req, res, next) => {
         const {id} = req.params
 
         const findId = await prisma.cars.findUnique({where: {id}});
+        if(!findId)
+            return res.status(404).json({status: 404, message: 'This id not found!!!'})
 
         let cid = findId.categoryId
 
         const findCateg = await prisma.category.findFirst({where: {id: cid}})
 
-        if(!findId)
-            return res.status(404).json({status: 404, message: 'This id not found!!!'})
+        let categName = findCateg.title
 
-        res.status(200).json({ status: 200, message: "Success", data: {findId, categoryName: findCateg.title}});
+        class FindOne{
+            constructor(id, name, city, year, body, mileage, transmission, color, price, photo, categoryId, description, categName){
+                this.id = id;
+                this.name = name;
+                this.city = city;
+                this.year = year;
+                this.body = body;
+                this.mileage = mileage;
+                this.transmission = transmission;
+                this.color = color;
+                this.price = price;
+                this.photo = photo;
+                this.categoryId = categoryId;
+                this.description = description;
+                this.categName = categName
+            }
+        }
+
+        const newData = new FindOne(findId.id, findId.name, findId.city, findId.year, findId.body, findId.mileage, findId.transmission, findId.color, findId.price, findId.photo, findId.categoryId, findId.description, categName)
+
+        res.status(200).json({ status: 200, message: "Success", data: newData });
     } catch (error) {
         next(error)
     }
